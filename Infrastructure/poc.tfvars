@@ -1,6 +1,6 @@
 project_name                   = "testing-poc-leveldb-new"
-org_id                         = "607481481084"
-billing_account                = "0118AD-39A022-133C88"
+org_id                         = "" #add org_id
+billing_account                = "" #add billing_id
 cluster_name                   = "leveldb-cluster"
 region                         = "us-central1"
 cluster_autoscaling_enabled    = true
