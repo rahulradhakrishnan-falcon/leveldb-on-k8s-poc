@@ -1,0 +1,41 @@
+name: Terraform Format & Plan Check
+
+on:
+  pull_request:
+    paths:
+      - 'Infrastructure/**'
+  push:
+    branches:
+      - main
+    paths:
+      - 'Infrastructure/**'
+
+jobs:
+  terraform-check:
+    runs-on: ubuntu-latest
+    name: Terraform Format and Plan
+
+    defaults:
+      run:
+        working-directory: Infrastructure
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -no-color

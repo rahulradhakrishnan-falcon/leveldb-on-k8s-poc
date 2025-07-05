@@ -1,0 +1,38 @@
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Infrastructure/**'
+
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+    name: Terraform Init & Apply
+
+    defaults:
+      run:
+        working-directory: Infrastructure
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan (show output)
+        run: terraform plan -var-file="poc.tfvars" -no-color
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -var-file="poc.tfvars"
