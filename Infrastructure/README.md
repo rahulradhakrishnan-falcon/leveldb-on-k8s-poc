@@ -31,3 +31,23 @@ This folder contains all Terraform configuration needed to provision the cloud i
 terraform init
 terraform plan -var-file="prod.tfvars"
 terraform apply -var-file="prod.tfvars"
+
+## 🗂️ Terraform State Management
+
+Terraform state is stored remotely in a Google Cloud Storage (GCS) bucket configured in `backend.tf`.
+
+### 🔐 Locking & Versioning
+
+The GCS bucket has **object versioning enabled** to support state locking and recovery. This prevents concurrent operations from corrupting the state file and provides historical versions in case of failure.
+
+> ⚠️ Ensure the bucket is created before running `terraform init`. You can provision it manually or via Terraform in a bootstrap phase.
+
+### ✅ Example
+
+```hcl
+terraform {
+  backend "gcs" {
+    bucket  = "leveldb-terraform-state"
+    prefix  = "terraform/state"
+  }
+}

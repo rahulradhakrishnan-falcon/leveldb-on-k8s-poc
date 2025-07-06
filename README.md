@@ -42,9 +42,23 @@ After the data is fully copied and verified, gradually shift read traffic to the
 Integrated with Stackdriver for logs and metrics collection. Alerts are configured for pod restarts, node issues, and backup failures. Developers can inspect logs via Logs Explorer and use dashboards for debugging.
 
 ### 🔐 Security & Tooling
-Infrastructure is provisioned using Terraform and deployed via GitHub Actions. IAM roles follow least-privilege principles, backups are encrypted at rest in GCS, and the cluster uses RBAC and optionally OPA/Gatekeeper for policy enforcement.
+
+The Kubernetes cluster is secured using role-based access control (RBAC) and Google Cloud IAM with least-privilege principles. Backups created by Velero are encrypted at rest in Google Cloud Storage. All service accounts — including those used by Terraform, GitHub Actions, and Velero — are granted only the minimal set of permissions required for their respective tasks.
+
 
 
 ## 📐 Backup  Flow
 
 ![Backup Flow](./assets/backup_process.png)
+
+## 📂 Project Structure & Documentation
+
+This project is organized into the following components:
+
+| Folder         | Description                                                                                     |
+|----------------|-------------------------------------------------------------------------------------------------|
+| [`application/`](./application/README.md)   | Contains the LevelDB application code and Dockerfile used to build the container image. |
+| [`helm_chart/`](./helm_chart/README.md)     | Helm chart used to deploy the LevelDB app on Kubernetes with StatefulSet and PVCs.       |
+| [`Infrastructure/`](./Infrastructure/README.md) | Terraform code to provision GCP infrastructure: GKE, Artifact Registry, IAM, Velero, etc. |
+
+Each folder includes its own `README.md` with detailed setup, usage, and configuration instructions.
