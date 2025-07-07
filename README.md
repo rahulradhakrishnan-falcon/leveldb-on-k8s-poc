@@ -24,7 +24,29 @@ This project demonstrates a **Kubernetes-native** high availability and backup-r
 LevelDB is deployed as a Kubernetes StatefulSet with GCE Persistent Disks to ensure data persistence during node or pod failures. Readiness and liveness probes are configured for automated health checks and recovery.
 
 ### 💾 Backup & Restore
-Backups are handled using Velero with Restic, leveraging LVM snapshots on the node for consistent and efficient volume-level backups, supporting up to 2 TB per pod. Snapshots run every 6 hours to meet the defined RPO. Restore procedures are fully automated and optimized to minimize performance impact.
+Backups are managed using **Velero with Restic**, which performs file-level backups of each pod’s persistent volume. Snapshots are stored in a remote GCS bucket and scheduled every **6 hours** to meet the RPO requirement.
+
+#### 🧪 Node or PVC Failure Recovery
+
+When a node fails or a PVC is lost:
+
+- Monitoring tools (e.g., Stackdriver) will raise an alert.
+- A **manual restore** is initiated by applying a `Restore` manifest.
+- Velero recreates the lost PVC and restores data from the latest snapshot.
+- The pod is automatically rescheduled and attached to the restored volume.
+
+#### 🔄 Restore Manifest Example
+
+```yaml
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: restore-leveldb-20250705
+spec:
+  backupName: leveldb-backup-20250705
+  restorePVs: true
+```
+
 
 ### 📈 Scalability
 
