@@ -6,7 +6,7 @@
 This project demonstrates a **Kubernetes-native** high availability and backup-ready setup for a LevelDB-based application, with:
 
 - **Resilient architecture** capable of auto-healing and recovery.
-- **Restic + LVM-based Velero** integration for snapshot backups.
+- **Restic + Velero** integration for snapshot backups.
 - **Terraform-driven IaC** for reproducibility and portability.
 - **CI/CD with GitHub Actions**.
 - **Monitoring with Stackdriver (Cloud Monitoring & Logging)**.
